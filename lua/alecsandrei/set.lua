@@ -18,6 +18,7 @@ vim.o.inccommand = "split"
 vim.o.cursorline = true
 vim.o.scrolloff = 15
 vim.o.confirm = true
+vim.o.relativenumber = true
 
 -- REMAPS --
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
