@@ -1,9 +1,9 @@
 -- Colorscheme
 return {
-	'ellisonleao/gruvbox.nvim',
-	name='gruvbox',
+	"ellisonleao/gruvbox.nvim",
+	name = "gruvbox",
 	config = function()
-		vim.cmd.colorscheme('gruvbox')
-		vim.o.background = 'dark'
-	end
+		vim.cmd.colorscheme("gruvbox")
+		vim.o.background = "dark"
+	end,
 }
