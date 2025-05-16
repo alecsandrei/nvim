@@ -7,23 +7,31 @@ vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = "yes:2"
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.o.inccommand = "split"
 vim.o.cursorline = true
 vim.o.scrolloff = 15
 vim.o.confirm = true
 vim.o.relativenumber = true
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.tabstop = 4
+vim.opt.expandtab = true
 
 -- REMAPS --
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>pv", ":q<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "<leader>z", ":lprev<CR>", { desc = "Jump to previous diagnostic" })
+vim.keymap.set("n", "<leader>x", ":lnext<CR>", { desc = "Jump to the next diagnostic" })
+vim.keymap.set("n", "<leader>c", ":lclose<CR>", { desc = "Close the diagnostic window" })
+
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
@@ -37,30 +45,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.hl.on_yank()
 	end,
 })
--- DIAGNOSTIC CONFIG --
-vim.diagnostic.config({
-	severity_sort = true,
-	float = { border = "rounded", source = "if_many" },
-	underline = { severity = vim.diagnostic.severity.ERROR },
-	signs = vim.g.have_nerd_font and {
-		text = {
-			[vim.diagnostic.severity.ERROR] = "󰅚 ",
-			[vim.diagnostic.severity.WARN] = "󰀪 ",
-			[vim.diagnostic.severity.INFO] = "󰋽 ",
-			[vim.diagnostic.severity.HINT] = "󰌶 ",
-		},
-	} or {},
-	virtual_text = {
-		source = "if_many",
-		spacing = 2,
-		format = function(diagnostic)
-			local diagnostic_message = {
-				[vim.diagnostic.severity.ERROR] = diagnostic.message,
-				[vim.diagnostic.severity.WARN] = diagnostic.message,
-				[vim.diagnostic.severity.INFO] = diagnostic.message,
-				[vim.diagnostic.severity.HINT] = diagnostic.message,
-			}
-			return diagnostic_message[diagnostic.severity]
-		end,
-	},
-})
+
+-- SILENCE --
+local notify_original = vim.notify
+vim.notify = function(msg, ...)
+  if
+    msg
+    and (
+      msg:match 'position_encoding param is required'
+      or msg:match 'Defaulting to position encoding of the first client'
+      or msg:match 'multiple different client offset_encodings'
+    )
+  then
+    return
+  end
+  return notify_original(msg, ...)
+end
