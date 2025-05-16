@@ -164,56 +164,47 @@ return {
 			--  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
 			local original_capabilities = vim.lsp.protocol.make_client_capabilities()
 			local capabilities = require("blink.cmp").get_lsp_capabilities(original_capabilities)
-
-			-- Enable the following language servers
-			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-			--
-			--  Add any additional override configuration in the following tables. Available keys are:
-			--  - cmd (table): Override the default command used to start the server
-			--  - filetypes (table): Override the default list of associated filetypes for the server
-			--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-			--  - settings (table): Override the default settings passed when initializing the server.
-			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-			local servers = {
-				rust_analyzer = {},
-				ruff = {},
-				pyright = {},
-				lua_ls = {},
-			}
-
-			-- Ensure the servers and tools above are installed
-			--
-			-- To check the current status of installed tools and/or manually install
-			-- other tools, you can run
-			--    :Mason
-			--
-			-- You can press `g?` for help in this menu.
-			--
-			-- `mason` had to be setup earlier: to configure its options see the
-			-- `dependencies` table for `nvim-lspconfig` above.
-			--
-			-- You can add other tools here that you want Mason to install
-			-- for you, so that they are available from within Neovim.
-			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"stylua", -- Used to format Lua code
+			vim.lsp.config("lua_ls", {
+				settings = {
+					Lua = {
+						completion = {
+							callSnippet = "Replace",
+						},
+						-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+						-- diagnostics = { disable = { 'missing-fields' } },
+					},
+				},
 			})
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
+			vim.lsp.config("pyright", {
+				settings = {
+					pyright = {
+						-- Using Ruff's import organizer
+						disableOrganizeImports = true,
+					},
+					python = {
+						analysis = {
+							-- Ignore all files for analysis to exclusively use Ruff for linting
+							ignore = { "*" },
+							typeCheckingMode = "off",
+						},
+					},
+				},
+			})
+
+			require("mason-tool-installer").setup({
+				ensure_installed = {
+					"stylua",
+					"lua_ls",
+					"pyright",
+					"rust_analyzer",
+					"ruff",
+					"mypy",
+				},
+			})
 			require("mason-lspconfig").setup({
 				ensure_installed = {},
 				automatic_installation = false,
-				handlers = {
-					function(server_name)
-						local lspconfig = require("lspconfig")
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						lspconfig[server_name].setup(server)
-					end,
-				},
 			})
 		end,
 	},
