@@ -177,7 +177,7 @@ return {
 			local servers = {
 				rust_analyzer = {},
 				ruff = {},
-				jedi_language_server = {},
+				pyright = {},
 				lua_ls = {},
 			}
 
