@@ -71,6 +71,7 @@ return { -- Autocompletion
 			-- By default, you may press `<c-space>` to show the documentation.
 			-- Optionally, set `auto_show = true` to show the documentation after a delay.
 			documentation = { auto_show = true },
+			list = { selection = { preselect = true, auto_insert = true } },
 		},
 
 		sources = {
