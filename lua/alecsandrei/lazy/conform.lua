@@ -15,6 +15,7 @@ return {
 	opts = {
 		notify_on_error = true,
 		formatters_by_ft = {
+			toml = { "tombi" },
 			lua = { "stylua" },
 			python = {
 				"ruff_fix",

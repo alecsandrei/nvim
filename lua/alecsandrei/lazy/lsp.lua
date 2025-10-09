@@ -198,6 +198,7 @@ return {
 
 			require("mason-tool-installer").setup({
 				ensure_installed = {
+					"tombi",
 					"stylua",
 					"lua_ls",
 					"pyright",
