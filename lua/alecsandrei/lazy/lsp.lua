@@ -198,6 +198,7 @@ return {
 
 			require("mason-tool-installer").setup({
 				ensure_installed = {
+					"jq",
 					"tombi",
 					"stylua",
 					"lua_ls",

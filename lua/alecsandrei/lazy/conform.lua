@@ -15,6 +15,7 @@ return {
 	opts = {
 		notify_on_error = true,
 		formatters_by_ft = {
+			json = { "jq" },
 			toml = { "tombi" },
 			lua = { "stylua" },
 			python = {
