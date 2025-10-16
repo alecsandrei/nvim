@@ -204,6 +204,7 @@ return {
 					"lua_ls",
 					"pyright",
 					"rust_analyzer",
+					"markdownlint",
 				},
 			})
 			require("mason-lspconfig").setup({
