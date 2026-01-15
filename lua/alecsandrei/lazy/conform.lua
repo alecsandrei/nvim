@@ -18,6 +18,7 @@ return {
 			json = { "jq" },
 			toml = { "tombi" },
 			lua = { "stylua" },
+			sql = { "sleek" },
 			python = {
 				"ruff_fix",
 				"ruff_format",
