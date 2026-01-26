@@ -45,19 +45,37 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.hl.on_yank()
 	end,
 })
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = {
+		"python",
+		"toml",
+		"javascript",
+		"c",
+		"lua",
+		"vim",
+		"vimdoc",
+		"query",
+		"markdown",
+		"markdown_inline",
+	},
+	callback = function()
+		-- syntax highlighting, provided by Neovim
+		vim.treesitter.start()
+	end,
+})
 
 -- SILENCE --
 local notify_original = vim.notify
 vim.notify = function(msg, ...)
-  if
-    msg
-    and (
-      msg:match 'position_encoding param is required'
-      or msg:match 'Defaulting to position encoding of the first client'
-      or msg:match 'multiple different client offset_encodings'
-    )
-  then
-    return
-  end
-  return notify_original(msg, ...)
+	if
+		msg
+		and (
+			msg:match("position_encoding param is required")
+			or msg:match("Defaulting to position encoding of the first client")
+			or msg:match("multiple different client offset_encodings")
+		)
+	then
+		return
+	end
+	return notify_original(msg, ...)
 end
