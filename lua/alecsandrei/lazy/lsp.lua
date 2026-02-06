@@ -200,6 +200,7 @@ return {
 				ensure_installed = {
 					"jq",
 					"tombi",
+					"shfmt",
 					"stylua",
 					"lua_ls",
 					"pyright",
