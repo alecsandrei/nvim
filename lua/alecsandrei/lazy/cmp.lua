@@ -76,8 +76,20 @@ return { -- Autocompletion
 
 		sources = {
 			default = { "lsp", "path", "snippets", "lazydev" },
+			per_filetype = {
+				tex = { "omni", "lsp", "path", "snippets", "buffer" },
+			},
 			providers = {
 				lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
+				omni = {
+					name = "Omni",
+					module = "blink.cmp.sources.complete_func",
+					opts = {
+						complete_func = function()
+							return vim.bo.omnifunc
+						end,
+					},
+				},
 			},
 		},
 
