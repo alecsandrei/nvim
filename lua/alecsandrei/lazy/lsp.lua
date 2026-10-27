@@ -181,6 +181,13 @@ return {
 			})
 
 			vim.lsp.config("pyright", {
+				cmd = function(dispatchers, config)
+					local server = (config.root_dir or "") .. "/.venv/bin/pyright-langserver"
+					if vim.fn.executable(server) == 0 then
+						server = "pyright-langserver"
+					end
+					return vim.lsp.rpc.start({ server, "--stdio" }, dispatchers)
+				end,
 				settings = {
 					pyright = {
 						-- Using Ruff's import organizer
